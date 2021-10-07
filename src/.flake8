@@ -1,0 +1,4 @@
+[flake8]
+ignore = **/migrations/** ALL
+max-line-length = 79
+exclude = tests/*, */migrations/*

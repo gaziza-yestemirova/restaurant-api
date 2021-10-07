@@ -15,6 +15,10 @@ services:
     volumes:
       - ./src:/src:rw
       - ./.env:/src/core/.env
+    environment:
+      test: "pytest -v
+          --cov . --cov-report term-missing --cov-fail-under=100
+          --flake8 --no-migrations --reuse-db"
     depends_on:
       - postgres
     ports:

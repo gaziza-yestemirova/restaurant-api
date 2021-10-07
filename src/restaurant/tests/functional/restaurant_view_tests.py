@@ -152,7 +152,7 @@ def test_restaurants_get_random_200(
     restaurant_ids = set()
     for _ in range(5):
         response: Response = client.get(
-            path=f'/api/restaurants/get_random_restaurant/'
+            path='/api/restaurants/get_random_restaurant/'
         )
         assert response.status_code == 200
         restaurant_id: int = response.json()['id']
