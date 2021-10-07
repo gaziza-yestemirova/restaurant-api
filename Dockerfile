@@ -6,6 +6,8 @@ ADD ./src/requirements.txt /src/
 RUN apk update \
     && apk --no-cache add bash postgresql-dev \
     binutils gdal-dev \
+# Django translations
+    gettext \
 # Add build dependencies
     && apk --no-cache add --virtual .build-deps \
     tzdata libffi-dev gcc g++ curl-dev libressl-dev \
