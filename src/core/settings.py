@@ -95,5 +95,6 @@ REST_FRAMEWORK: MappingProxyType = MappingProxyType({
     ), 'DEFAULT_PERMISSION_CLASSES': (),
     'DEFAULT_PAGINATION_CLASS':
         'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 30
+    'PAGE_SIZE': 30,
+    'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',
 })

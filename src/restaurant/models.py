@@ -1,6 +1,7 @@
 from typing import Tuple
 
 from django.db import models
+from django.db.models import Manager
 from django.utils.translation import gettext_lazy as _
 
 
@@ -23,7 +24,7 @@ class Restaurant(models.Model):
         verbose_name=_('restaurant_address'),
         help_text=_('restaurant_address'), max_length=128,
     )
-    rating = models.IntegerField(
+    rating = models.PositiveSmallIntegerField(
         verbose_name=_('rating'), help_text=_('rating'),
         default=0,
     )
@@ -47,6 +48,8 @@ class Restaurant(models.Model):
         auto_now=True, help_text=_('modified'),
         verbose_name=_('modified'),
     )
+
+    objects = models.Manager()
 
     class Meta:
         app_label = 'restaurant'
