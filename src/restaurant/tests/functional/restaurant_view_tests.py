@@ -5,8 +5,8 @@ from restaurant.models import Restaurant
 
 
 def test_restaurants_get_list_200(
-        db, client: Client, restaurant_nicole: Restaurant,
-        restaurant_peking_duck: Restaurant,
+    db, client: Client, restaurant_nicole: Restaurant,
+    restaurant_peking_duck: Restaurant,
 ) -> None:
     response: Response = client.get(path='/api/restaurants/')
 
@@ -48,9 +48,11 @@ def test_restaurants_get_list_200(
 
 
 def test_restaurants_retrieve_by_id_200(
-        db, client: Client, restaurant_nicole: Restaurant,
+    db, client: Client, restaurant_nicole: Restaurant,
 ) -> None:
-    response: Response = client.get(path=f'/api/restaurants/{restaurant_nicole.pk}/')
+    response: Response = client.get(
+        path=f'/api/restaurants/{restaurant_nicole.pk}/'
+    )
 
     assert response.status_code == 200 and response.json() == {
         'id': restaurant_nicole.pk,
@@ -70,9 +72,11 @@ def test_restaurants_retrieve_by_id_200(
 
 
 def test_restaurants_delete_204(
-        db, client: Client, restaurant_nicole: Restaurant,
+    db, client: Client, restaurant_nicole: Restaurant,
 ) -> None:
-    response: Response = client.delete(path=f'/api/restaurants/{restaurant_nicole.pk}/')
+    response: Response = client.delete(
+        path=f'/api/restaurants/{restaurant_nicole.pk}/'
+    )
 
     assert response.status_code == 204
     assert Restaurant.objects.count() == 0
@@ -109,3 +113,33 @@ def test_restaurants_create_201_and_update_200(
     assert response.status_code == 200
     restaurant_sababa.refresh_from_db()
     assert restaurant_sababa.rating == new_rating
+
+
+def test_restaurants_get_by_name_200(
+    db, client: Client, restaurant_peking_duck: Restaurant,
+    restaurant_nicole: Restaurant,
+) -> None:
+    response: Response = client.get(
+        path=f'/api/restaurants/?search={restaurant_peking_duck.name}'
+    )
+
+    assert response.status_code == 200 and response.json() == {
+        'count': 1,
+        'next': None,
+        'previous': None,
+        'results': [{
+            'id': restaurant_peking_duck.id,
+            'name': restaurant_peking_duck.name,
+            'state': restaurant_peking_duck.state,
+            'address': restaurant_peking_duck.address,
+            'rating': restaurant_peking_duck.rating,
+            'phone': restaurant_peking_duck.phone,
+            'cuisine': restaurant_peking_duck.cuisine,
+            'created': restaurant_peking_duck.created.strftime(
+                '%Y-%m-%d %H:%M:%S'
+            ),
+            'modified': restaurant_peking_duck.modified.strftime(
+                '%Y-%m-%d %H:%M:%S'
+            ),
+        }],
+    }
