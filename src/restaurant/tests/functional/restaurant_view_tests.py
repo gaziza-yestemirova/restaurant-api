@@ -143,3 +143,19 @@ def test_restaurants_get_by_name_200(
             ),
         }],
     }
+
+
+def test_restaurants_get_random_200(
+    db, client: Client, restaurant_nicole: Restaurant,
+    restaurant_peking_duck: Restaurant,
+) -> None:
+    restaurant_ids = set()
+    for _ in range(5):
+        response: Response = client.get(
+            path=f'/api/restaurants/get_random_restaurant/'
+        )
+        assert response.status_code == 200
+        restaurant_id: int = response.json()['id']
+        restaurant_ids.add(restaurant_id)
+
+    assert len(restaurant_ids) == 2
