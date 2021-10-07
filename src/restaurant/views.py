@@ -5,6 +5,6 @@ from restaurant.serializers import RestaurantSerializer
 
 
 class RestaurantViewSet(ModelViewSet):
-    http_method_names = ('get', 'post', 'delete',)
+    http_method_names = ('get', 'post', 'patch', 'delete',)
     serializer_class = RestaurantSerializer
     queryset = Restaurant.objects.all()
