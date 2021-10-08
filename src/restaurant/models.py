@@ -1,7 +1,21 @@
-from typing import Tuple
+from typing import Tuple, Dict
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+
+class RestaurantQuerySet(models.QuerySet):
+    def delete(self) -> Tuple[int, models.QuerySet]:
+        self.update(is_active=False)
+        return 0, self.none()
+
+
+class RestaurantManager(models.Manager):
+    def get_queryset(self) -> models.QuerySet:
+        return RestaurantQuerySet(model=self.model, using=self._db)
+
+    def delete(self) -> Tuple[models.QuerySet, int]:
+        return self.get_queryset().delete()
 
 
 class Restaurant(models.Model):
@@ -48,7 +62,12 @@ class Restaurant(models.Model):
         verbose_name=_('modified'),
     )
 
-    objects = models.Manager()
+    objects = RestaurantManager()
+
+    def delete(self, **kwargs) -> Tuple[int, Dict]:
+        self.is_active = False
+        self.save(update_fields=('is_active',))
+        return 0, {}
 
     class Meta:
         app_label = 'restaurant'

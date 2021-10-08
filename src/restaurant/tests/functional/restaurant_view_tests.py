@@ -79,7 +79,10 @@ def test_restaurants_delete_204(
     )
 
     assert response.status_code == 204
-    assert Restaurant.objects.count() == 0
+    assert Restaurant.objects.count() == 1
+    assert Restaurant.objects.last().is_active is False
+    Restaurant.objects.delete()
+    assert Restaurant.objects.count() == 1
 
 
 def test_restaurants_create_201_and_update_200(
